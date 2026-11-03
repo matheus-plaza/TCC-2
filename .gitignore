@@ -1,0 +1,9 @@
+# IDEs e SO
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Variáveis de ambiente locais
+.env

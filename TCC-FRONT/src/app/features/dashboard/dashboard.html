@@ -1,0 +1,320 @@
+<header class="pagina-cabecalho">
+  <div>
+    <h1>Olá, {{ auth.usuario()?.nome }}</h1>
+    <p>
+      @if (auth.produtor()) {
+        Acompanhe a fertilidade dos seus talhões e os receituários adotados pelo seu agrônomo.
+      } @else if (auth.agronomo()) {
+        Laudos, recomendações e evolução do solo dos produtores vinculados a você.
+      } @else {
+        Visão geral de todos os produtores do sistema.
+      }
+    </p>
+  </div>
+</header>
+
+@if (vazio()) {
+  <section class="cartao">
+    <app-estado-vazio
+      icone="agriculture"
+      titulo="Nenhuma propriedade por aqui ainda"
+      texto="Comece cadastrando uma propriedade e seus talhões. Depois é só registrar os laudos de solo."
+    >
+      <a mat-flat-button routerLink="/propriedades">Cadastrar propriedade</a>
+      @if (auth.agronomo()) {
+        <a mat-stroked-button routerLink="/usuarios">Cadastrar produtor</a>
+      }
+    </app-estado-vazio>
+  </section>
+} @else {
+  @if (resumo.valor(); as r) {
+    <section class="kpis" aria-label="Indicadores gerais">
+      <a class="kpi" routerLink="/propriedades">
+        <span class="kpi-nome">Propriedades</span>
+        <span class="kpi-valor">{{ r.propriedades }}</span>
+      </a>
+      <a class="kpi" routerLink="/propriedades">
+        <span class="kpi-nome">Talhões</span>
+        <span class="kpi-valor">{{ r.talhoes }}</span>
+        <span class="kpi-detalhe">{{ r.areaTotalHectares | numero: 1 : 0 }} ha no total</span>
+      </a>
+      <a class="kpi" routerLink="/laudos">
+        <span class="kpi-nome">Laudos de solo</span>
+        <span class="kpi-valor">{{ r.laudos }}</span>
+      </a>
+      <a class="kpi" routerLink="/recomendacoes" [queryParams]="{ status: 'ADOTADA' }">
+        <span class="kpi-nome">Recomendações adotadas</span>
+        <span class="kpi-valor">{{ r.recomendacoesAdotadas }}</span>
+      </a>
+      @if (!auth.produtor()) {
+        <a class="kpi" routerLink="/recomendacoes" [queryParams]="{ status: 'SIMULACAO' }">
+          <span class="kpi-nome">Simulações salvas</span>
+          <span class="kpi-valor">{{ r.simulacoesSalvas }}</span>
+        </a>
+      }
+      <div class="kpi">
+        <span class="kpi-nome">Colheitas registradas</span>
+        <span class="kpi-valor">{{ r.colheitasRegistradas }}</span>
+      </div>
+    </section>
+  }
+
+  <section class="cartao">
+    <h2><mat-icon>monitoring</mat-icon> Evolução do solo</h2>
+    <app-talhao-busca class="seletor" [(talhaoId)]="talhaoId" [obrigatorio]="true" rotulo="Talhão" />
+
+    @if (talhaoId() === null) {
+      <p class="texto-suave">Escolha um talhão para ver a evolução dos indicadores.</p>
+    } @else if (evolucao.valor(); as e) {
+      @if (e.pontos.length === 0) {
+        <app-estado-vazio
+          icone="science"
+          titulo="Este talhão ainda não tem laudo de 0-20 cm"
+          texto="Registre um laudo para começar a acompanhar a evolução."
+        >
+          <a mat-flat-button routerLink="/laudos/novo" [queryParams]="{ talhaoId: talhaoId() }">Registrar laudo</a>
+        </app-estado-vazio>
+      } @else {
+        <div class="acoes-talhao">
+          <a mat-stroked-button [routerLink]="['/propriedades/talhoes', talhaoId(), 'historico']">
+            <mat-icon>history</mat-icon> Linha do tempo
+          </a>
+          @if (!auth.produtor()) {
+            <a mat-stroked-button routerLink="/recomendacoes/nova" [queryParams]="{ laudoId: e.pontos[e.pontos.length - 1].laudoId }">
+              <mat-icon>calculate</mat-icon> Recomendar com o último laudo
+            </a>
+          }
+        </div>
+
+        @if (e.pontos.length === 1) {
+          <p class="nota">Só há um laudo neste talhão: a evolução aparece a partir do segundo.</p>
+        }
+
+        <div class="multiplos">
+          @for (g of graficos(); track g.chave) {
+            <figure class="grafico">
+              <figcaption>
+                <span>{{ g.titulo }} @if (g.unidade && g.unidade !== '%') { <small>({{ g.unidade }})</small> }</span>
+                <strong>{{ g.ultimo | numero: g.casas }}</strong>
+              </figcaption>
+              <div class="area">
+                <canvas baseChart type="line" [data]="g.dados" [options]="g.opcoes" [attr.aria-label]="'Evolução de ' + g.titulo" role="img"></canvas>
+              </div>
+            </figure>
+          }
+          @if (graficoColheita(); as g) {
+            @if (g.possui) {
+              <figure class="grafico">
+                <figcaption><span>Produtividade esperada e colhida <small>(t/ha)</small></span></figcaption>
+                <div class="area">
+                  <canvas baseChart type="bar" [data]="g.dados" [options]="g.opcoes" aria-label="Produtividade esperada e colhida por safra" role="img"></canvas>
+                </div>
+              </figure>
+            }
+          }
+          @if (graficoGasto(); as g) {
+            @if (g.possui) {
+              <figure class="grafico">
+                <figcaption><span>Gasto com adubação <small>(R$/ha)</small></span></figcaption>
+                <div class="area">
+                  <canvas baseChart type="bar" [data]="g.dados" [options]="g.opcoes" aria-label="Gasto com adubação por hectare em cada safra" role="img"></canvas>
+                </div>
+              </figure>
+            }
+          }
+        </div>
+
+        <mat-expansion-panel class="tabela-dados">
+          <mat-expansion-panel-header>
+            <mat-panel-title><mat-icon>table_rows</mat-icon>&nbsp; Ver os dados em tabela</mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="tabela-container">
+            <table class="lista">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  @for (i of indicadores(); track i.chave) {
+                    <th class="numero">{{ i.titulo }}</th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                @for (p of e.pontos; track p.laudoId) {
+                  <tr class="clicavel" [routerLink]="['/laudos', p.laudoId]">
+                    <td class="principal" data-rotulo="Data">{{ p.data | dataBr }}</td>
+                    @for (i of indicadores(); track i.chave) {
+                      <td class="numero" [attr.data-rotulo]="i.titulo">{{ valorDe(p, i.chave) | numero: i.casas }}</td>
+                    }
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </mat-expansion-panel>
+
+        <h3 class="subtitulo">Colheita e gasto com adubação</h3>
+        @if (e.safras.length) {
+          <div class="tabela-container">
+            <table class="lista">
+              <thead>
+                <tr>
+                  <th>Colheita</th>
+                  <th>Cultura</th>
+                  <th class="numero">Esperada (t/ha)</th>
+                  <th class="numero">Colhida (t/ha)</th>
+                  <th class="numero">Diferença</th>
+                  <th class="numero">Gasto (R$)</th>
+                  <th class="numero">Gasto (R$/ha)</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (s of e.safras; track s.recomendacaoId) {
+                  <tr class="clicavel" [routerLink]="['/recomendacoes', s.recomendacaoId]">
+                    <td class="principal" data-rotulo="Colheita">{{ s.dataColheita ? (s.dataColheita | dataBr) : '—' }}</td>
+                    <td data-rotulo="Cultura"><span [class]="classeCultura(s.cultura)">{{ s.cultura }}</span></td>
+                    <td class="numero" data-rotulo="Esperada (t/ha)">{{ s.produtividadeEsperadaTonHa | numero: 2 : 0 }}</td>
+                    <td class="numero" data-rotulo="Colhida (t/ha)">{{ s.produtividadeColhidaTonHa | numero: 2 : 0 }}</td>
+                    <td class="numero" data-rotulo="Diferença">{{ diferenca(s.diferencaPercentual) }}</td>
+                    <td class="numero" data-rotulo="Gasto (R$)">{{ s.custoAdubacaoReais | numero: 2 }}</td>
+                    <td class="numero" data-rotulo="Gasto (R$/ha)">{{ s.custoPorHectareReais | numero: 2 }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <p class="nota">Nenhuma safra registrada neste talhão. Abra uma recomendação adotada para informar a colheita e o gasto.</p>
+        }
+
+        @if (e.adotadas.length) {
+          <h3 class="subtitulo">Recomendações adotadas neste talhão</h3>
+          <div class="tabela-container">
+            <table class="lista">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Cultura</th>
+                  <th class="numero">Calcário (t/ha)</th>
+                  <th class="numero">Gesso (kg/ha)</th>
+                  <th class="numero">N (kg/ha)</th>
+                  <th class="numero">P₂O₅ (kg/ha)</th>
+                  <th class="numero">K₂O (kg/ha)</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (a of e.adotadas; track a.recomendacaoId) {
+                  <tr class="clicavel" [routerLink]="['/recomendacoes', a.recomendacaoId]">
+                    <td class="principal" data-rotulo="Data">{{ a.data | dataBr }}</td>
+                    <td data-rotulo="Cultura"><span [class]="classeCultura(a.cultura)">{{ a.cultura }}</span></td>
+                    <td class="numero" data-rotulo="Calcário (t/ha)">{{ a.calcarioTonHa | numero }}</td>
+                    <td class="numero" data-rotulo="Gesso (kg/ha)">{{ a.gessoKgHa | numero: 0 }}</td>
+                    <td class="numero" data-rotulo="N (kg/ha)">{{ a.nKgHa | faixaDose }}</td>
+                    <td class="numero" data-rotulo="P₂O₅ (kg/ha)">{{ a.p2o5KgHa | faixaDose }}</td>
+                    <td class="numero" data-rotulo="K₂O (kg/ha)">{{ a.k2oKgHa | faixaDose }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+    }
+  </section>
+
+  @if (resumo.valor(); as r) {
+    <div class="colunas">
+      <section class="cartao">
+        <h2><mat-icon>science</mat-icon> Laudos recentes</h2>
+        @if (r.laudosRecentes.length) {
+          <ul class="recentes">
+            @for (l of r.laudosRecentes; track l.id) {
+              <li>
+                <a [routerLink]="['/laudos', l.id]">
+                  <span class="texto">
+                    <strong>{{ l.talhao }}</strong>
+                    <span class="sub">{{ l.propriedade }} · {{ l.data | dataBr }} · {{ l.profundidadeCm }} cm</span>
+                  </span>
+                  <span class="valor">V% {{ l.v | numero: 1 }}</span>
+                  <mat-icon class="seta">chevron_right</mat-icon>
+                </a>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="texto-suave">Nenhum laudo registrado.</p>
+        }
+      </section>
+
+      <section class="cartao">
+        <h2><mat-icon>assignment</mat-icon> Recomendações recentes</h2>
+        @if (r.recomendacoesRecentes.length) {
+          <ul class="recentes">
+            @for (rec of r.recomendacoesRecentes; track rec.id) {
+              <li>
+                <a [routerLink]="['/recomendacoes', rec.id]">
+                  <span class="texto">
+                    <strong>{{ rec.cultura }} · {{ rec.talhao }}</strong>
+                    <span class="sub">{{ rec.propriedade }} · {{ rec.data | dataBr }}</span>
+                  </span>
+                  @if (rec.status === 'ADOTADA') {
+                    <span class="selo-status adotada">Adotada</span>
+                  } @else {
+                    <span class="selo-status simulacao">Simulação</span>
+                  }
+                  <mat-icon class="seta">chevron_right</mat-icon>
+                </a>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="texto-suave">Nenhuma recomendação registrada.</p>
+        }
+      </section>
+
+      <section class="cartao">
+        <h2><mat-icon>agriculture</mat-icon> Colheitas recentes</h2>
+        @if (r.colheitasRecentes.length) {
+          <ul class="recentes">
+            @for (s of r.colheitasRecentes; track s.recomendacaoId) {
+              <li>
+                <a [routerLink]="['/recomendacoes', s.recomendacaoId]">
+                  <span class="texto">
+                    <strong>{{ s.cultura }} · {{ s.talhao }}</strong>
+                    <span class="sub">
+                      {{ s.dataColheita | dataBr }} · {{ s.produtividadeColhidaTonHa | numero: 2 : 0 }} de
+                      {{ s.produtividadeEsperadaTonHa | numero: 2 : 0 }} t/ha
+                    </span>
+                  </span>
+                  <span class="valor">{{ diferenca(s.diferencaPercentual) }}</span>
+                  <mat-icon class="seta">chevron_right</mat-icon>
+                </a>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="texto-suave">Nenhuma colheita registrada.</p>
+        }
+      </section>
+    </div>
+
+    @if (r.talhoesSemLaudo.length) {
+      <section class="cartao">
+        <h2><mat-icon>pending_actions</mat-icon> Talhões sem laudo <app-ajuda termo="profundidade" /></h2>
+        <ul class="recentes">
+          @for (t of r.talhoesSemLaudo; track t.id) {
+            <li>
+              <a routerLink="/laudos/novo" [queryParams]="{ talhaoId: t.id }">
+                <span class="texto">
+                  <strong>{{ t.identificacao }}</strong>
+                  <span class="sub">{{ t.propriedadeNome }} · {{ t.produtorNome }}</span>
+                </span>
+                <span class="valor">Registrar laudo</span>
+                <mat-icon class="seta">chevron_right</mat-icon>
+              </a>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  }
+}

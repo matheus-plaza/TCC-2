@@ -1,0 +1,164 @@
+.passos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--texto-suave);
+
+    &.ativo {
+      color: var(--verde-900);
+      font-weight: 600;
+    }
+  }
+
+  .numero {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--cinza-200);
+    color: var(--texto-suave);
+    font-size: 0.8rem;
+    font-weight: 700;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .ativo .numero,
+  .feito .numero {
+    background: var(--verde-700);
+    color: #fff;
+  }
+}
+
+.largura-total {
+  width: 100%;
+}
+
+.campos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 4px 16px;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.resumo-laudo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 8px;
+  margin: 0 0 4px;
+  padding: 12px;
+  border-radius: var(--raio-pequeno);
+  background: var(--superficie-2);
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  span {
+    font-size: 0.72rem;
+    color: var(--texto-suave);
+  }
+
+  strong {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.manejo {
+  margin-top: 8px;
+}
+
+.rotulo-campo {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--texto-suave);
+}
+
+.simular {
+  height: 48px;
+  font-size: 1rem;
+
+  mat-spinner {
+    display: inline-block;
+    margin-right: 8px;
+    --mat-progress-spinner-active-indicator-color: currentColor;
+  }
+}
+
+.status-data {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+}
+
+.titulo-resultado {
+  margin-bottom: 16px;
+
+  h2 {
+    margin: 8px 0 4px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--verde-900);
+  }
+
+  .sub {
+    display: block;
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.8;
+  }
+}
+
+.acoes-resultado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+
+  .espaco {
+    flex: 1;
+  }
+
+  .nota {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 599.98px) {
+  .simular {
+    width: 100%;
+  }
+
+  .acoes-resultado button {
+    flex: 1 1 100%;
+    height: 46px;
+  }
+
+  .acoes-resultado .espaco {
+    display: none;
+  }
+}

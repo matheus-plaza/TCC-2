@@ -1,0 +1,52 @@
+# AgroMotor: Sistema de Apoio à Decisão para calagem e adubação (Base NEPAR-SBCS, 2ª ed.)
+#   Tudo:             docker compose up -d --build     → http://localhost:8081
+#   Só o banco (dev): docker compose up -d postgres
+name: agromotor
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: agromotor
+      POSTGRES_USER: agromotor
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-agromotor}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agromotor -d agromotor"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./TCC-BACK
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/agromotor
+      DB_USER: agromotor
+      DB_PASSWORD: ${DB_PASSWORD:-agromotor}
+      CORS_ORIGINS: http://localhost:8081
+      TZ: America/Sao_Paulo
+      # Sem JWT_SECRET, a API gera um segredo a cada inicialização e os logins caem ao reiniciar
+      JWT_SECRET: ${JWT_SECRET:-}
+      # "demo" carrega dados FICTÍCIOS de exemplo no banco vazio. Fora da demonstração,
+      # defina SPRING_PROFILES_ACTIVE=default, ADMIN_EMAIL e ADMIN_PASSWORD.
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-demo}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./TCC-FRONT
+    depends_on:
+      - backend
+    ports:
+      - "8081:80"
+
+volumes:
+  pgdata:

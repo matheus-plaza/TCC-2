@@ -1,0 +1,126 @@
+<a class="voltar" routerLink="/laudos"><mat-icon>arrow_back</mat-icon> Laudos de solo</a>
+<header class="pagina-cabecalho">
+  <div>
+    <h1>Registro de laudo analítico de solo</h1>
+    <p>Digite os valores do laudo do laboratório. SB, CTC, V% e m% são calculados enquanto você digita.</p>
+  </div>
+</header>
+
+<form [formGroup]="form" (ngSubmit)="salvar()">
+  <section class="cartao">
+    <h2><mat-icon>location_on</mat-icon> Talhão e coleta</h2>
+    <app-talhao-busca [(talhaoId)]="talhaoId" [obrigatorio]="true" />
+    @if (tentouSalvar() && !talhaoId()) {
+      <p class="erro-campo" role="alert">Selecione o talhão.</p>
+    }
+    <div class="coleta">
+      <mat-form-field>
+        <mat-label>Data da coleta</mat-label>
+        <input matInput type="date" formControlName="dataAnalise" [max]="hoje" required />
+        <mat-error>{{ form.controls.dataAnalise.getError('servidor') ?? 'Informe a data' }}</mat-error>
+      </mat-form-field>
+      <div class="profundidade">
+        <span class="rotulo-campo">Profundidade <app-ajuda termo="profundidade" /></span>
+        <mat-radio-group formControlName="profundidadeCm" aria-label="Profundidade da amostra">
+          <mat-radio-button value="0-20">0-20 cm</mat-radio-button>
+          <mat-radio-button value="20-40">20-40 cm</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+  </section>
+
+  <div formGroupName="quimica">
+    <section class="cartao">
+      <h2><mat-icon>science</mat-icon> Atributos químicos do solo</h2>
+      <div class="metodo-ph">
+        <span class="rotulo-campo">pH medido em <app-ajuda termo="metodoPh" /></span>
+        <mat-radio-group [formControl]="form.controls.metodoPh" aria-label="Método de medição do pH">
+          <mat-radio-button value="CACL2">CaCl₂</mat-radio-button>
+          <mat-radio-button value="AGUA">H₂O</mat-radio-button>
+        </mat-radio-group>
+        @if (tentouSalvar() && form.controls.metodoPh.invalid) {
+          <p class="erro-metodo" role="alert">Informe se o pH foi medido em CaCl₂ ou em H₂O.</p>
+        }
+      </div>
+      <div class="grade-campos">
+        @for (c of atributos; track c.nome) {
+          <mat-form-field>
+            <mat-label>{{ c.rotulo }}</mat-label>
+            <input matInput type="number" inputmode="decimal" step="any" [formControlName]="c.nome" required />
+            @if (c.unidade) {
+              <span matTextSuffix class="unidade">{{ c.unidade }}</span>
+            }
+            @if (c.ajuda) {
+              <mat-hint align="end"><app-ajuda [termo]="c.ajuda" /></mat-hint>
+            }
+            @if (erro(c); as mensagem) {
+              <mat-error>{{ mensagem }}</mat-error>
+            }
+          </mat-form-field>
+        }
+      </div>
+    </section>
+
+    <section class="cartao">
+      <h2><mat-icon>grain</mat-icon> Micronutrientes <span class="selo">opcional</span></h2>
+      <p class="descricao">Sem valor, o micronutriente fica como não avaliado na recomendação.</p>
+      <div class="grade-campos">
+        @for (c of micronutrientes; track c.nome) {
+          <mat-form-field>
+            <mat-label>{{ c.rotulo }}</mat-label>
+            <input matInput type="number" inputmode="decimal" step="any" [formControlName]="c.nome" />
+            <span matTextSuffix class="unidade">{{ c.unidade }}</span>
+            @if (c.ajuda) {
+              <mat-hint align="end"><app-ajuda [termo]="c.ajuda" /></mat-hint>
+            }
+            @if (erro(c); as mensagem) {
+              <mat-error>{{ mensagem }}</mat-error>
+            }
+          </mat-form-field>
+        }
+      </div>
+    </section>
+  </div>
+
+  <section class="cartao calculados">
+    <h2><mat-icon>insights</mat-icon> Valores calculados</h2>
+    <dl aria-live="polite">
+      <div>
+        <dt>Soma de Bases (SB) <app-ajuda termo="SB" /></dt>
+        <dd>{{ previa()?.somaBases | numero }}</dd>
+      </div>
+      <div>
+        <dt>CTC Efetiva (t) <app-ajuda termo="t" /></dt>
+        <dd>{{ previa()?.ctcEfetiva | numero }}</dd>
+      </div>
+      <div>
+        <dt>CTC Total (T) <app-ajuda termo="CTC" /></dt>
+        <dd>{{ previa()?.ctcTotal | numero }}</dd>
+      </div>
+      <div>
+        <dt>Saturação por Bases (V1%) <app-ajuda termo="V" /></dt>
+        <dd>{{ previa()?.saturacaoBases | numero: 1 }}@if (previa()) {%}</dd>
+      </div>
+      <div>
+        <dt>Saturação por Al (m%) <app-ajuda termo="m" /></dt>
+        <dd>{{ previa()?.saturacaoAluminio | numero: 1 }}@if (previa()) {%}</dd>
+      </div>
+    </dl>
+  </section>
+
+  @if (erros().length) {
+    <div class="aviso erro" role="alert">
+      <mat-icon>error</mat-icon>
+      <ul>
+        @for (e of erros(); track $index) {
+          <li>{{ e }}</li>
+        }
+      </ul>
+    </div>
+  }
+
+  <div class="acoes-form barra-acoes">
+    <a mat-button routerLink="/laudos">Cancelar</a>
+    <button mat-flat-button type="submit" [disabled]="salvando()"><mat-icon>save</mat-icon> Salvar laudo</button>
+  </div>
+</form>

@@ -1,0 +1,94 @@
+<div class="app" [class.compacto]="layout.compacto()" [class.menu-aberto]="menuAberto()">
+  <aside class="lateral" [attr.aria-hidden]="layout.compacto() && !menuAberto()">
+    <a class="marca" routerLink="/dashboard">
+      <span class="marca-icone"><mat-icon>eco</mat-icon></span>
+      <span>
+        <span class="marca-nome">AgroMotor</span>
+        <span class="marca-sub">Calagem e adubação · NEPAR-SBCS</span>
+      </span>
+    </a>
+
+    <a mat-flat-button class="acao-principal" routerLink="/laudos/novo">
+      <mat-icon>add</mat-icon> Registrar laudo
+    </a>
+
+    <nav aria-label="Menu principal">
+      @for (item of menuPrincipal(); track item.rota) {
+        <a class="item" [routerLink]="item.rota" routerLinkActive="ativo"
+           [routerLinkActiveOptions]="{ exact: !!item.exato }">
+          <mat-icon>{{ item.icone }}</mat-icon>
+          <span>{{ item.rotulo }}</span>
+        </a>
+      }
+      <div class="secao">Cadastros</div>
+      @for (item of menuCadastros(); track item.rota) {
+        <a class="item" [routerLink]="item.rota" routerLinkActive="ativo">
+          <mat-icon>{{ item.icone }}</mat-icon>
+          <span>{{ item.rotulo }}</span>
+        </a>
+      }
+    </nav>
+
+    <p class="rodape">
+      Ferramenta de apoio ao cálculo, baseada no Manual de Adubação e Calagem para o Estado do Paraná (SBCS/NEPAR, 2ª ed.).
+      Não substitui a avaliação técnica e a assinatura de um engenheiro agrônomo.
+    </p>
+  </aside>
+
+  <div class="veu" (click)="menuAberto.set(false)"></div>
+
+  <div class="principal">
+    <header class="topo">
+      @if (layout.compacto()) {
+        <button mat-icon-button (click)="menuAberto.set(true)" aria-label="Abrir menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <a class="marca-mini" routerLink="/dashboard"><mat-icon>eco</mat-icon> AgroMotor</a>
+      }
+      <span class="espaco"></span>
+
+      @if (auth.usuario(); as u) {
+        <button class="conta" [matMenuTriggerFor]="menuConta" aria-label="Abrir menu da conta">
+          <span class="avatar">{{ iniciais(u.nome) }}</span>
+          @if (!layout.celular()) {
+            <span class="conta-texto">
+              <small>{{ rotuloPerfil[u.perfil] }}</small>
+              <strong>{{ u.nome }}</strong>
+            </span>
+          }
+          <mat-icon class="seta">expand_more</mat-icon>
+        </button>
+        <mat-menu #menuConta="matMenu" xPosition="before">
+          <div class="menu-titulo" (click)="$event.stopPropagation()">
+            {{ u.nome }}
+            <small>{{ u.email }}</small>
+          </div>
+          <mat-divider />
+          <button mat-menu-item (click)="auth.sair()">
+            <mat-icon>logout</mat-icon> Sair
+          </button>
+        </mat-menu>
+      }
+    </header>
+
+    <div class="progresso" [class.visivel]="carregando.ativo()">
+      @if (carregando.ativo()) {
+        <mat-progress-bar mode="indeterminate" />
+      }
+    </div>
+
+    @if (sistema.parametrosNaoConferidos()) {
+      <div class="faixa-parametros" role="status">
+        <mat-icon>science</mat-icon>
+        <span>
+          <strong>Tabelas em demonstração ({{ sistema.versao()?.codigo }}).</strong>
+          As doses são ilustrativas, ainda não conferidas com o Manual NEPAR. Não use em campo.
+        </span>
+      </div>
+    }
+
+    <main class="pagina">
+      <router-outlet />
+    </main>
+  </div>
+</div>
