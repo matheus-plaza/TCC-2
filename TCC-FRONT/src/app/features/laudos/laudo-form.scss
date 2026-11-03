@@ -1,0 +1,99 @@
+.coleta {
+  display: grid;
+  grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+  gap: 4px 24px;
+  align-items: start;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.profundidade {
+  min-height: 56px;
+}
+
+.metodo-ph {
+  margin-bottom: 12px;
+}
+
+.erro-metodo {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--vermelho-600);
+}
+
+.rotulo-campo {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--texto-suave);
+}
+
+.erro-campo {
+  margin: -12px 0 12px;
+  font-size: 0.8rem;
+  color: var(--vermelho-600);
+}
+
+.grade-campos {
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+.descricao {
+  margin: -8px 0 12px;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+.unidade {
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+  padding-left: 4px;
+}
+
+.calculados {
+  background: var(--verde-50);
+  border-color: var(--verde-100);
+
+  dl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px 20px;
+    margin: 0;
+  }
+
+  dt {
+    font-size: 0.8rem;
+    color: var(--texto-suave);
+  }
+
+  dd {
+    margin: 2px 0 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--verde-900);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.barra-acoes {
+  margin-top: 0;
+}
+
+@media (max-width: 599.98px) {
+  .coleta {
+    grid-template-columns: 1fr;
+  }
+
+  .calculados dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .barra-acoes button {
+    flex: 1;
+    height: 46px;
+  }
+}

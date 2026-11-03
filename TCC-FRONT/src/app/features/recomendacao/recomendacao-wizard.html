@@ -1,0 +1,188 @@
+<header class="pagina-cabecalho">
+  <div>
+    <h1>Nova recomendação</h1>
+    <p>Teste cenários de cultura e rendimento à vontade: nada é gravado até você salvar ou adotar.</p>
+  </div>
+</header>
+
+<ol class="passos" aria-label="Etapas">
+  <li [class.ativo]="etapa() === 'cenario'" [class.feito]="etapa() === 'resultado'">
+    <span class="numero">@if (etapa() === 'resultado') { <mat-icon>check</mat-icon> } @else { 1 }</span>
+    Cenário da safra
+  </li>
+  <li [class.ativo]="etapa() === 'resultado'">
+    <span class="numero">2</span>
+    Recomendação proposta
+  </li>
+</ol>
+
+@if (pendencias().length) {
+  <div class="aviso erro" role="alert">
+    <mat-icon>rule</mat-icon>
+    <div>
+      <strong>Faltam parâmetros NEPAR para este cálculo</strong>
+      <p>O motor não assume valores. Cadastre nas tabelas paramétricas:</p>
+      <ul>
+        @for (p of pendencias(); track $index) {
+          <li>{{ p }}</li>
+        }
+      </ul>
+    </div>
+  </div>
+}
+@if (erros().length) {
+  <div class="aviso erro" role="alert">
+    <mat-icon>error</mat-icon>
+    <ul>
+      @for (e of erros(); track $index) {
+        <li>{{ e }}</li>
+      }
+    </ul>
+  </div>
+}
+
+@if (etapa() === 'cenario') {
+  <form [formGroup]="form" (ngSubmit)="simular()">
+    <section class="cartao">
+      <h2><mat-icon>science</mat-icon> Laudo de solo</h2>
+      <app-talhao-busca [(talhaoId)]="talhaoId" [obrigatorio]="true" />
+
+      @if (talhaoId()) {
+        @if (laudos.valor().length) {
+          <mat-form-field class="largura-total">
+            <mat-label>Laudo de 0-20 cm</mat-label>
+            <mat-select [value]="laudoId()" (valueChange)="laudoId.set($event)">
+              @for (l of laudos.valor(); track l.id) {
+                <mat-option [value]="l.id">{{ l.dataAnalise | dataBr }} · V% {{ l.indicadores.saturacaoBases | numero: 1 }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          @if (laudo(); as l) {
+            <div class="resumo-laudo">
+              <div><span>pH ({{ rotuloMetodoPh[l.metodoPh] }})</span><strong>{{ l.ph | numero: 2 }}</strong></div>
+              <div><span>V%</span><strong>{{ l.indicadores.saturacaoBases | numero: 1 }}</strong></div>
+              <div><span>CTC (T)</span><strong>{{ l.indicadores.ctcTotal | numero }}</strong></div>
+              <div><span>Argila</span><strong>{{ l.argilaPorcentagem | numero: 1 : 0 }}%</strong></div>
+              <div><span>P</span><strong>{{ l.pMehlich | numero: 1 }}</strong></div>
+              <div><span>K</span><strong>{{ l.kCmolc | numero: 2 }}</strong></div>
+            </div>
+          }
+        } @else if (!laudos.carregando()) {
+          <app-estado-vazio
+            icone="science"
+            titulo="Este talhão não tem laudo de 0-20 cm"
+            texto="A calagem e a adubação partem desse laudo. Registre-o para continuar."
+          >
+            <a mat-flat-button routerLink="/laudos/novo" [queryParams]="{ talhaoId: talhaoId() }">Registrar laudo</a>
+          </app-estado-vazio>
+        }
+      }
+    </section>
+
+    <section class="cartao">
+      <h2><mat-icon>agriculture</mat-icon> Manejo da safra</h2>
+      <div class="campos">
+        <mat-form-field>
+          <mat-label>Cultura alvo</mat-label>
+          <mat-select formControlName="culturaAlvoId">
+            @for (c of culturas.valor(); track c.id) {
+              <mat-option [value]="c.id">{{ c.nome }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>Selecione a cultura</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Cultura antecessora</mat-label>
+          <mat-select formControlName="culturaAnteriorId">
+            @for (c of culturas.valor(); track c.id) {
+              <mat-option [value]="c.id">{{ c.nome }}</mat-option>
+            }
+            <mat-option [value]="OUTRA_GRAMINEA">Outra gramínea</mat-option>
+            <mat-option [value]="OUTRA_LEGUMINOSA">Outra leguminosa</mat-option>
+            <mat-option [value]="POUSIO">Pousio/Palhada</mat-option>
+          </mat-select>
+          <mat-hint>
+            @if (sugestao.valor(); as s) {
+              Última adotada: {{ s.cultura.nome }} ({{ s.dataAdocao | dataBr }})
+            } @else {
+              Define o crédito ou débito de N
+            }
+            <app-ajuda termo="antecessora" />
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Expectativa de rendimento</mat-label>
+          <input matInput type="number" inputmode="decimal" step="any" min="0.01" formControlName="expectativaRendimentoTonHa" />
+          <span matTextSuffix>t/ha</span>
+          <mat-hint>Metas maiores exigem doses maiores <app-ajuda termo="rendimento" /></mat-hint>
+          <mat-error>{{ erroDeFormato(form.controls.expectativaRendimentoTonHa) ?? 'Informe o rendimento, maior que zero' }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>PRNT do calcário</mat-label>
+          <input matInput type="number" inputmode="decimal" step="any" min="1" max="200" formControlName="prntCalcario" />
+          <span matTextSuffix>%</span>
+          <mat-hint>Base de cálculo: 100% <app-ajuda termo="PRNT" /></mat-hint>
+          <mat-error>{{ erroDeFormato(form.controls.prntCalcario) ?? 'Use um valor de 1 a 200' }}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="manejo">
+        <span class="rotulo-campo">Sistema de manejo <app-ajuda termo="manejo" /></span>
+        <mat-radio-group formControlName="sistemaManejo" aria-label="Sistema de manejo">
+          <mat-radio-button value="PLANTIO_DIRETO">Plantio Direto</mat-radio-button>
+          <mat-radio-button value="CONVENCIONAL">Convencional</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </section>
+
+    <div class="acoes-form">
+      @if (!laudoId()) {
+        <span class="texto-suave">Selecione um talhão com laudo de 0-20 cm para simular.</span>
+      }
+      <button mat-flat-button type="submit" class="simular" [disabled]="!laudoId() || simulando()">
+        @if (simulando()) {
+          <mat-spinner diameter="20" />
+        } @else {
+          <mat-icon>calculate</mat-icon>
+        }
+        Simular recomendação
+      </button>
+    </div>
+  </form>
+} @else if (resultado(); as r) {
+  <section class="cartao">
+    <div class="titulo-resultado">
+      <div>
+        <div class="status-data">
+          <span class="selo-status simulacao"><mat-icon>edit_note</mat-icon> Simulação</span>
+          <span class="sub">Data: {{ r.dataGeracao | dataBr }}</span>
+        </div>
+        <h2>Resultado da interpretação e recomendação proposta</h2>
+        <p class="sub">
+          <span [class]="classeCultura(r.culturaAlvo.nome)">{{ r.culturaAlvo.nome }}</span>
+          após {{ r.culturaAnterior?.nome ?? r.antecessora.toLowerCase() }} · {{ r.expectativaRendimentoTonHa | numero: 2 : 0 }} t/ha ·
+          {{ r.talhao?.identificacao }}, {{ r.talhao?.propriedadeNome }} · laudo de {{ r.laudo.dataAnalise | dataBr }}
+        </p>
+      </div>
+    </div>
+    <app-recomendacao-proposta [recomendacao]="r" />
+  </section>
+
+  <div class="acoes-resultado">
+    <button mat-button (click)="voltar()"><mat-icon>arrow_back</mat-icon> Voltar e editar</button>
+    <span class="espaco"></span>
+    @if (auth.agronomo()) {
+      <button mat-stroked-button (click)="salvarSimulacao()" [disabled]="salvando() || adotando()">
+        <mat-icon>bookmark_add</mat-icon> Salvar simulação
+      </button>
+      <button mat-flat-button (click)="adotar()" [disabled]="salvando() || adotando()">
+        <mat-icon>task_alt</mat-icon> Adotar recomendação
+      </button>
+    } @else {
+      <span class="texto-suave nota">A adoção é uma decisão técnica do agrônomo vinculado ao produtor.</span>
+    }
+  </div>
+}
