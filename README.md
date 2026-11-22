@@ -64,6 +64,8 @@ cd TCC-BACK
 - `FluxoRecomendacaoIntegracaoTest`, `SegurancaIntegracaoTest`, `ModoDemonstracaoIntegracaoTest`: API, JWT, RBAC,
   JPA e Flyway contra PostgreSQL 16 real, sem Docker, incluindo o limite de 300 ms da simulação.
 - `ManualNeparIntegracaoTest`: tabelas publicadas no banco e cenários com valores do manual.
+- `LaudosSinteticosIntegracaoTest`: 50 laudos sintéticos de 5 solos do Paraná, em 5 condições de fertilidade, comparados com
+  um cálculo de referência feito fora do sistema ([`docs/laudos-sinteticos.md`](docs/laudos-sinteticos.md)).
 
 ## Arquitetura
 

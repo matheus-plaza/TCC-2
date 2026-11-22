@@ -42,14 +42,14 @@ class ModoDemonstracaoIntegracaoTest extends IntegracaoBase {
 
         JsonNode resumo = corpo(mvc.perform(get("/api/v1/dashboard/resumo").header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk()));
-        assertThat(resumo.get("propriedades").asInt()).isEqualTo(2);
-        assertThat(resumo.get("talhoes").asInt()).isEqualTo(4);
+        assertThat(resumo.get("propriedades").asInt()).isEqualTo(7);
+        assertThat(resumo.get("talhoes").asInt()).isEqualTo(29);
         assertThat(resumo.get("recomendacoesAdotadas").asInt()).isEqualTo(7);
-        assertThat(resumo.get("simulacoesSalvas").asInt()).isEqualTo(1);
+        assertThat(resumo.get("simulacoesSalvas").asInt()).isEqualTo(76);
 
         JsonNode recomendacoes = corpo(mvc.perform(get("/api/v1/recomendacoes").header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk()));
-        assertThat(recomendacoes).hasSize(8);
+        assertThat(recomendacoes).hasSize(83);
 
         mvc.perform(get("/api/v1/parametros/vigentes").header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())

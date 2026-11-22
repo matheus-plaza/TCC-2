@@ -1,0 +1,76 @@
+solo;condicao;cultura;rendimento;anterior;sb;t_total;v1;nc;gesso;classe_p;classe_k;k_ctc;classe_mo;n_min;n_max;p2o5_min;p2o5_max;k2o_min;k2o_max;zn;b;cu;mn
+lv-argiloso;muito-baixa;Soja;3.5;Trigo;1.36;13.36;10.2;6.66;3200;Muito baixo;Muito baixo;0.4;Alto;0;0;101;120;111;130;2.0;1.5;0;0
+lv-argiloso;muito-baixa;Milho;7.5;Soja;1.36;13.36;10.2;7.99;3200;Muito baixo;Muito baixo;0.4;Alto;20;60;111;130;101;130;;;;
+lv-argiloso;muito-baixa;Trigo;3.0;Soja;1.36;13.36;10.2;7.99;3200;Muito baixo;Muito baixo;0.4;Alto;31;50;61;80;51;60;;;;
+lv-argiloso;baixa;Soja;3.5;Trigo;2.70;12.40;21.8;4.74;3200;Muito baixo;Baixo;0.8;Alto;0;0;101;120;91;110;2.0;1.5;0;0
+lv-argiloso;baixa;Milho;7.5;Soja;2.70;12.40;21.8;5.98;3200;Muito baixo;Baixo;0.8;Alto;20;60;111;130;71;100;;;;
+lv-argiloso;baixa;Trigo;3.0;Soja;2.70;12.40;21.8;5.98;3200;Muito baixo;Baixo;0.8;Alto;31;50;61;80;41;50;;;;
+lv-argiloso;media;Soja;3.5;Trigo;5.50;11.70;47.0;1.52;0;Médio;Médio;1.7;Alto;0;0;61;80;71;90;1.5;1.0;0;0
+lv-argiloso;media;Milho;7.5;Soja;5.50;11.70;47.0;2.69;0;Médio;Médio;1.7;Alto;20;60;71;90;41;70;;;;
+lv-argiloso;media;Trigo;3.0;Soja;5.50;11.70;47.0;2.69;0;Médio;Médio;1.7;Alto;31;50;41;50;31;40;;;;
+lv-argiloso;alta;Soja;3.5;Trigo;8.45;12.25;69.0;0.00;0;Muito alto;Muito alto;3.7;Muito alto;0;0;20;40;0;0;0;0;0;0
+lv-argiloso;alta;Milho;7.5;Soja;8.45;12.25;69.0;0.00;0;Muito alto;Muito alto;3.7;Muito alto;20;60;30;50;20;20;;;;
+lv-argiloso;alta;Trigo;3.0;Soja;8.45;12.25;69.0;0.00;0;Muito alto;Muito alto;3.7;Muito alto;31;40;31;40;10;20;;;;
+lv-argiloso;muito-alta;Soja;3.5;Trigo;11.50;14.10;81.6;0.00;0;Condição a evitar;Muito alto;5.0;Muito alto;0;0;0;0;0;0;0;0;0;0
+lv-argiloso;muito-alta;Milho;7.5;Soja;11.50;14.10;81.6;0.00;0;Condição a evitar;Muito alto;5.0;Muito alto;20;60;0;0;20;20;;;;
+lv-argiloso;muito-alta;Trigo;3.0;Soja;11.50;14.10;81.6;0.00;0;Condição a evitar;Muito alto;5.0;Muito alto;31;40;0;0;10;20;;;;
+nitossolo;muito-baixa;Soja;3.5;Trigo;2.17;11.97;18.1;5.01;3200;Muito baixo;Baixo;0.6;Médio;0;0;101;120;91;110;2.0;1.5;0;0
+nitossolo;muito-baixa;Milho;7.5;Soja;2.17;11.97;18.1;6.21;3200;Muito baixo;Baixo;0.6;Médio;20;60;111;130;71;100;;;;
+nitossolo;muito-baixa;Trigo;3.0;Soja;2.17;11.97;18.1;6.21;3200;Muito baixo;Baixo;0.6;Médio;51;70;61;80;41;50;;;;
+nitossolo;baixa;Soja;3.5;Trigo;4.00;11.40;35.1;2.84;3200;Muito baixo;Baixo;0.9;Alto;0;0;101;120;91;110;2.0;1.5;0;0
+nitossolo;baixa;Milho;7.5;Soja;4.00;11.40;35.1;3.98;3200;Muito baixo;Baixo;0.9;Alto;20;60;111;130;71;100;;;;
+nitossolo;baixa;Trigo;3.0;Soja;4.00;11.40;35.1;3.98;3200;Muito baixo;Baixo;0.9;Alto;31;50;61;80;41;50;;;;
+nitossolo;media;Soja;3.5;Trigo;6.08;11.08;54.9;0.00;0;Baixo;Médio;1.6;Alto;0;0;81;100;71;90;1.5;1.0;0;0
+nitossolo;media;Milho;7.5;Soja;6.08;11.08;54.9;1.68;0;Baixo;Médio;1.6;Alto;20;60;91;110;41;70;;;;
+nitossolo;media;Trigo;3.0;Soja;6.08;11.08;54.9;1.68;0;Baixo;Médio;1.6;Alto;31;50;51;60;31;40;;;;
+nitossolo;alta;Soja;3.5;Trigo;9.02;12.42;72.6;0.00;0;Muito alto;Alto;2.6;Alto;0;0;20;40;51;70;0;0;0;0
+nitossolo;alta;Milho;7.5;Soja;9.02;12.42;72.6;0.00;0;Muito alto;Alto;2.6;Alto;20;60;30;50;21;40;;;;
+nitossolo;alta;Trigo;3.0;Soja;9.02;12.42;72.6;0.00;0;Muito alto;Alto;2.6;Alto;31;50;31;40;21;30;;;;
+nitossolo;muito-alta;Soja;3.5;Trigo;12.30;14.70;83.7;0.00;0;Muito alto;Muito alto;5.4;Muito alto;0;0;20;40;0;0;0;0;0;0
+nitossolo;muito-alta;Milho;7.5;Soja;12.30;14.70;83.7;0.00;0;Muito alto;Muito alto;5.4;Muito alto;20;60;30;50;20;20;;;;
+nitossolo;muito-alta;Trigo;3.0;Soja;12.30;14.70;83.7;0.00;0;Muito alto;Muito alto;5.4;Muito alto;31;40;31;40;10;20;;;;
+lv-medio;muito-baixa;Soja;3.5;Trigo;0.41;3.81;10.8;1.88;700;Muito baixo;Muito baixo;0.3;Muito baixo;0;0;101;120;111;130;2.0;1.5;1.0;6.0
+lv-medio;muito-baixa;Milho;7.5;Soja;0.41;3.81;10.8;2.26;700;Muito baixo;Muito baixo;0.3;Muito baixo;20;60;111;130;101;130;;;;
+lv-medio;muito-baixa;Trigo;3.0;Soja;0.41;3.81;10.8;2.26;700;Muito baixo;Muito baixo;0.3;Muito baixo;51;70;61;80;51;60;;;;
+lv-medio;baixa;Soja;3.5;Trigo;0.83;3.83;21.7;1.47;700;Baixo;Baixo;0.8;Baixo;0;0;81;100;91;110;2.0;1.5;1.0;6.0
+lv-medio;baixa;Milho;7.5;Soja;0.83;3.83;21.7;1.85;700;Baixo;Baixo;0.8;Baixo;20;60;91;110;71;100;;;;
+lv-medio;baixa;Trigo;3.0;Soja;0.83;3.83;21.7;1.85;700;Baixo;Baixo;0.8;Baixo;51;70;51;60;41;50;;;;
+lv-medio;media;Soja;3.5;Trigo;1.96;4.16;47.1;0.54;0;Baixo;Médio;1.4;Médio;0;0;81;100;71;90;1.5;1.0;0.5;6.0
+lv-medio;media;Milho;7.5;Soja;1.96;4.16;47.1;0.95;0;Baixo;Médio;1.4;Médio;20;60;91;110;41;70;;;;
+lv-medio;media;Trigo;3.0;Soja;1.96;4.16;47.1;0.95;0;Baixo;Médio;1.4;Médio;51;70;51;60;31;40;;;;
+lv-medio;alta;Soja;3.5;Trigo;3.12;4.72;66.1;0.00;0;Muito alto;Alto;2.5;Médio;0;0;20;40;51;70;0;0;0;3.0
+lv-medio;alta;Milho;7.5;Soja;3.12;4.72;66.1;0.00;0;Muito alto;Alto;2.5;Médio;20;60;30;50;21;40;;;;
+lv-medio;alta;Trigo;3.0;Soja;3.12;4.72;66.1;0.00;0;Muito alto;Alto;2.5;Médio;51;70;31;40;21;30;;;;
+lv-medio;muito-alta;Soja;3.5;Trigo;4.30;5.50;78.2;0.00;0;Condição a evitar;Muito alto;3.6;Médio;0;0;0;0;0;0;0;0;0;3.0
+lv-medio;muito-alta;Milho;7.5;Soja;4.30;5.50;78.2;0.00;0;Condição a evitar;Muito alto;3.6;Médio;20;60;0;0;20;20;;;;
+lv-medio;muito-alta;Trigo;3.0;Soja;4.30;5.50;78.2;0.00;0;Condição a evitar;Muito alto;3.6;Médio;51;70;0;0;10;20;;;;
+lb;muito-baixa;Soja;3.5;Trigo;0.64;18.64;3.4;10.54;3200;Muito baixo;Muito baixo;0.2;Muito alto;0;0;101;120;111;130;2.0;1.5;0;6.0
+lb;muito-baixa;Milho;7.5;Soja;0.64;18.64;3.4;12.41;3200;Muito baixo;Muito baixo;0.2;Muito alto;20;60;111;130;101;130;;;;
+lb;muito-baixa;Trigo;3.0;Soja;0.64;18.64;3.4;12.41;3200;Muito baixo;Muito baixo;0.2;Muito alto;31;40;61;80;51;60;;;;
+lb;baixa;Soja;3.5;Trigo;1.45;16.45;8.8;8.42;3200;Muito baixo;Muito baixo;0.3;Muito alto;0;0;101;120;111;130;2.0;1.5;0;6.0
+lb;baixa;Milho;7.5;Soja;1.45;16.45;8.8;10.07;3200;Muito baixo;Muito baixo;0.3;Muito alto;20;60;111;130;101;130;;;;
+lb;baixa;Trigo;3.0;Soja;1.45;16.45;8.8;10.07;3200;Muito baixo;Muito baixo;0.3;Muito alto;31;40;61;80;51;60;;;;
+lb;media;Soja;3.5;Trigo;5.75;15.25;37.7;3.40;3200;Médio;Médio;1.6;Muito alto;0;0;61;80;71;90;1.5;1.0;0;6.0
+lb;media;Milho;7.5;Soja;5.75;15.25;37.7;4.93;3200;Médio;Médio;1.6;Muito alto;20;60;71;90;41;70;;;;
+lb;media;Trigo;3.0;Soja;5.75;15.25;37.7;4.93;3200;Médio;Médio;1.6;Muito alto;31;40;41;50;31;40;;;;
+lb;alta;Soja;3.5;Trigo;9.55;15.55;61.4;0.00;0;Alto;Muito alto;3.5;Muito alto;0;0;41;60;0;0;0;0;0;3.0
+lb;alta;Milho;7.5;Soja;9.55;15.55;61.4;0.00;0;Alto;Muito alto;3.5;Muito alto;20;60;51;70;20;20;;;;
+lb;alta;Trigo;3.0;Soja;9.55;15.55;61.4;0.00;0;Alto;Muito alto;3.5;Muito alto;31;40;31;40;10;20;;;;
+lb;muito-alta;Soja;3.5;Trigo;13.10;17.30;75.7;0.00;0;Muito alto;Muito alto;5.2;Muito alto;0;0;20;40;0;0;0;0;0;3.0
+lb;muito-alta;Milho;7.5;Soja;13.10;17.30;75.7;0.00;0;Muito alto;Muito alto;5.2;Muito alto;20;60;30;50;20;20;;;;
+lb;muito-alta;Trigo;3.0;Soja;13.10;17.30;75.7;0.00;0;Muito alto;Muito alto;5.2;Muito alto;31;40;31;40;10;20;;;;
+argissolo;muito-baixa;Soja;3.5;Trigo;0.51;3.71;13.7;1.72;1200;Muito baixo;Muito baixo;0.3;Muito baixo;0;0;101;120;111;130;2.0;1.5;1.0;6.0
+argissolo;muito-baixa;Milho;7.5;Soja;0.51;3.71;13.7;2.09;1200;Muito baixo;Muito baixo;0.3;Muito baixo;20;60;111;130;101;130;;;;
+argissolo;muito-baixa;Trigo;3.0;Soja;0.51;3.71;13.7;2.09;1200;Muito baixo;Muito baixo;0.3;Muito baixo;51;70;61;80;51;60;;;;
+argissolo;baixa;Soja;3.5;Trigo;1.13;3.93;28.8;1.23;1200;Muito baixo;Baixo;0.8;Baixo;0;0;101;120;91;110;2.0;1.5;1.0;6.0
+argissolo;baixa;Milho;7.5;Soja;1.13;3.93;28.8;1.62;1200;Muito baixo;Baixo;0.8;Baixo;20;60;111;130;71;100;;;;
+argissolo;baixa;Trigo;3.0;Soja;1.13;3.93;28.8;1.62;1200;Muito baixo;Baixo;0.8;Baixo;51;70;61;80;41;50;;;;
+argissolo;media;Soja;3.5;Trigo;2.28;4.38;52.1;0.00;0;Médio;Médio;1.8;Baixo;0;0;61;80;71;90;1.5;1.0;0.5;6.0
+argissolo;media;Milho;7.5;Soja;2.28;4.38;52.1;0.79;0;Médio;Médio;1.8;Baixo;20;60;71;90;41;70;;;;
+argissolo;media;Trigo;3.0;Soja;2.28;4.38;52.1;0.79;0;Médio;Médio;1.8;Baixo;51;70;41;50;31;40;;;;
+argissolo;alta;Soja;3.5;Trigo;3.44;5.14;66.9;0.00;0;Alto;Alto;2.7;Médio;0;0;41;60;51;70;0;0;0;3.0
+argissolo;alta;Milho;7.5;Soja;3.44;5.14;66.9;0.00;0;Alto;Alto;2.7;Médio;20;60;51;70;21;40;;;;
+argissolo;alta;Trigo;3.0;Soja;3.44;5.14;66.9;0.00;0;Alto;Alto;2.7;Médio;51;70;31;40;21;30;;;;
+argissolo;muito-alta;Soja;3.5;Trigo;4.65;5.75;80.9;0.00;0;Muito alto;Muito alto;4.3;Médio;0;0;20;40;0;0;0;0;0;3.0
+argissolo;muito-alta;Milho;7.5;Soja;4.65;5.75;80.9;0.00;0;Muito alto;Muito alto;4.3;Médio;20;60;30;50;20;20;;;;
+argissolo;muito-alta;Trigo;3.0;Soja;4.65;5.75;80.9;0.00;0;Muito alto;Muito alto;4.3;Médio;51;70;31;40;10;20;;;;

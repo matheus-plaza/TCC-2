@@ -55,6 +55,9 @@ Um roteiro curto para ver o fluxo principal:
 4. Em **Recomendações**, abrir a recomendação adotada e exportar o receituário em PDF.
 5. Entrar como **Produtor** para ver o painel de evolução do solo e os receituários adotados.
 
+Os laudos da validação também ficam no sistema: como **Agrônomo**, a lista de propriedades traz uma propriedade para cada
+um dos 5 solos, com um talhão por condição de fertilidade e as simulações de soja, milho e trigo já registradas.
+
 ## Testes
 
 ```bash
@@ -62,8 +65,8 @@ cd TCC-BACK
 ./mvnw test
 ```
 
-São 148 testes: motor de cálculo, casos de controle, regras de arquitetura (ArchUnit) e integração com PostgreSQL real,
-sem Docker.
+São 223 testes: motor de cálculo, casos de controle, regras de arquitetura (ArchUnit), integração com PostgreSQL real, sem
+Docker, e a validação com 50 laudos sintéticos de solos do Paraná, explicada em `docs/laudos-sinteticos.md`.
 
 ## Problemas comuns
 

@@ -78,10 +78,10 @@ nível crítico. No manual, a dose vem da classe do teor e só existe para a soj
 
 ## Pendências
 
-1. **Validação com 50 a 100 laudos reais** (seção 3.4 do TCC). O mecanismo está pronto em `CasosControleTest`: cada linha de
-   `casos-controle.csv` é um caso. Os casos atuais são sintéticos, cobrem as fórmulas e a tabela de gesso e foram calculados à
-   parte, com frações exatas, por `docs/validacao/gerar_casos_controle.py`. Agora que as tabelas são as do manual, a comparação
-   também pode incluir as classes e as faixas de dose.
+1. **Validação com laudos reais** (seção 3.4 do TCC). Sem laudos reais disponíveis, validei com 50 laudos sintéticos de 5 solos
+   do Paraná em 5 condições de fertilidade: as 75 recomendações conferem com o cálculo de referência
+   ([`laudos-sinteticos.md`](laudos-sinteticos.md)). Para acrescentar laudos reais, basta incluí-los em
+   `laudos-sinteticos.csv` (ou num arquivo no mesmo formato) e gerar a referência de novo.
 2. **Deploy em nuvem**, marcado como desejável no TCC.
 
 As duas verificações da seção 12 do SRS foram resolvidas pelo livro: o trigo tem V2 de 70%, e o fósforo tem uma única faixa de

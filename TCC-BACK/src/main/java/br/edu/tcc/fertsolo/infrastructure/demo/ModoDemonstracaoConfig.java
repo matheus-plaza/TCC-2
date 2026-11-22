@@ -17,6 +17,7 @@ public class ModoDemonstracaoConfig {
     public static final String NOME_AGRONOMO = "Carla Mendes";
     public static final String NOME_PRODUTOR = "José Antunes";
     public static final String NOME_OUTRO_PRODUTOR = "Marta Ribeiro";
+    public static final String NOME_PRODUTOR_VALIDACAO = "Área de Validação (laudos sintéticos)";
 
     @Bean
     @Profile("!demo")
