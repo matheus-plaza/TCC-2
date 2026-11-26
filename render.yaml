@@ -1,0 +1,41 @@
+# Publicação na Render: API em Docker e telas como site estático.
+# O banco é um PostgreSQL da Neon; DB_URL, DB_USER e DB_PASSWORD são preenchidos no painel.
+services:
+  - type: web
+    name: fertsolo-api
+    runtime: docker
+    plan: free
+    region: virginia
+    rootDir: TCC-BACK
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/v1/sistema/info
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: demo
+      - key: DB_URL
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: https://fertsolo.onrender.com
+
+  - type: web
+    name: fertsolo
+    runtime: static
+    rootDir: TCC-FRONT
+    buildCommand: npm ci && npx ng build
+    staticPublishPath: dist/fertsolo-front/browser
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://fertsolo-api.onrender.com/api/*
+      - type: rewrite
+        source: /*
+        destination: /index.html
