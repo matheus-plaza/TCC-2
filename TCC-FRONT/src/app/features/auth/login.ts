@@ -59,6 +59,7 @@ import { ROTULO_PERFIL } from '../../shared/formato';
         </form>
 
         <p class="troca">Ainda não tem conta? <a routerLink="/auth/registro">Criar conta</a></p>
+        <p class="troca"><a routerLink="/privacidade">Aviso de privacidade</a></p>
 
         @if (sistema.info()?.contasDemonstracao?.length) {
           <section class="demonstracao">

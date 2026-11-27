@@ -6,8 +6,9 @@ import { AuthService } from '../services/auth.service';
 /** Restringe a rota aos perfis em {@code data.perfis}. A API sempre revalida a permissão. */
 export const roleGuard: CanActivateFn = (route) => {
   const perfis = (route.data['perfis'] ?? []) as Perfil[];
-  if (inject(AuthService).temPerfil(perfis)) {
+  const auth = inject(AuthService);
+  if (auth.temPerfil(perfis)) {
     return true;
   }
-  return inject(Router).createUrlTree(['/dashboard']);
+  return inject(Router).createUrlTree([auth.admin() ? '/usuarios' : '/dashboard']);
 };

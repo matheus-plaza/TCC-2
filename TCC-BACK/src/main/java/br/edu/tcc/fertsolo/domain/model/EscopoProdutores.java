@@ -3,8 +3,8 @@ package br.edu.tcc.fertsolo.domain.model;
 import java.util.Set;
 
 /**
- * Produtores cujos dados um usuário pode ver (RNF05). {@code irrestrito} vale
- * para o administrador; nos demais perfis, a visão fica limitada a {@code produtorIds}.
+ * Produtores cujos dados um usuário pode ver (RNF05), limitados a {@code produtorIds}.
+ * {@code irrestrito} serve apenas às rotinas internas, como a carga da demonstração.
  */
 public record EscopoProdutores(boolean irrestrito, Set<Long> produtorIds) {
 

@@ -54,6 +54,12 @@ public class UsuarioController {
         return usuarios.atualizar(ator, id, request);
     }
 
+    @DeleteMapping("/usuarios/me")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void excluirMinhaConta(UsuarioAutenticado ator) {
+        usuarios.excluirMinhaConta(ator);
+    }
+
     @DeleteMapping("/usuarios/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(UsuarioAutenticado ator, @PathVariable Long id) {

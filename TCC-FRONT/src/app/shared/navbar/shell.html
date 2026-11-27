@@ -8,9 +8,11 @@
       </span>
     </a>
 
-    <a mat-flat-button class="acao-principal" routerLink="/laudos/novo">
-      <mat-icon>add</mat-icon> Registrar laudo
-    </a>
+    @if (!auth.admin()) {
+      <a mat-flat-button class="acao-principal" routerLink="/laudos/novo">
+        <mat-icon>add</mat-icon> Registrar laudo
+      </a>
+    }
 
     <nav aria-label="Menu principal">
       @for (item of menuPrincipal(); track item.rota) {
@@ -64,6 +66,12 @@
             <small>{{ u.email }}</small>
           </div>
           <mat-divider />
+          <a mat-menu-item routerLink="/privacidade">
+            <mat-icon>privacy_tip</mat-icon> Privacidade
+          </a>
+          <button mat-menu-item (click)="excluirMinhaConta()">
+            <mat-icon>person_remove</mat-icon> Excluir minha conta
+          </button>
           <button mat-menu-item (click)="auth.sair()">
             <mat-icon>logout</mat-icon> Sair
           </button>

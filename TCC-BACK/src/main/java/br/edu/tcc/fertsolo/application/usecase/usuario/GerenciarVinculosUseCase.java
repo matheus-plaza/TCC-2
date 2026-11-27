@@ -6,6 +6,7 @@ import br.edu.tcc.fertsolo.application.dto.VinculoRequest;
 import br.edu.tcc.fertsolo.application.dto.VinculoResponse;
 import br.edu.tcc.fertsolo.application.exception.AcessoNegadoException;
 import br.edu.tcc.fertsolo.application.exception.RecursoNaoEncontradoException;
+import br.edu.tcc.fertsolo.application.port.RegistroAuditoria;
 import br.edu.tcc.fertsolo.application.usecase.UseCase;
 import br.edu.tcc.fertsolo.domain.exception.RegraNegocioException;
 import br.edu.tcc.fertsolo.domain.model.PerfilUsuario;
@@ -25,9 +26,11 @@ import java.util.Locale;
 public class GerenciarVinculosUseCase {
 
     private final UsuarioRepository usuarios;
+    private final RegistroAuditoria auditoria;
 
-    public GerenciarVinculosUseCase(UsuarioRepository usuarios) {
+    public GerenciarVinculosUseCase(UsuarioRepository usuarios, RegistroAuditoria auditoria) {
         this.usuarios = usuarios;
+        this.auditoria = auditoria;
     }
 
     public List<VinculoResponse> listar(UsuarioAutenticado ator) {
@@ -43,8 +46,12 @@ public class GerenciarVinculosUseCase {
     public VinculoResponse vincular(UsuarioAutenticado ator, VinculoRequest request) {
         return switch (ator.perfil()) {
             case PRODUTOR -> criar(agronomoPorEmail(request.agronomoEmail()), buscar(ator.id()));
-            case ADMIN -> criar(buscarComPerfil(request.agronomoId(), PerfilUsuario.AGRONOMO),
-                    buscarComPerfil(request.produtorId(), PerfilUsuario.PRODUTOR));
+            case ADMIN -> {
+                VinculoResponse vinculo = criar(buscarComPerfil(request.agronomoId(), PerfilUsuario.AGRONOMO),
+                        buscarComPerfil(request.produtorId(), PerfilUsuario.PRODUTOR));
+                auditoria.registrar(ator.id(), RegistroAuditoria.CRIACAO_VINCULO, request.produtorId());
+                yield vinculo;
+            }
             case AGRONOMO -> throw new AcessoNegadoException(
                     "O vínculo é autorizado pelo produtor ou pelo administrador");
         };
@@ -56,6 +63,9 @@ public class GerenciarVinculosUseCase {
             throw new AcessoNegadoException("Você não participa deste vínculo");
         }
         usuarios.desvincular(agronomoId, produtorId);
+        if (ator.perfil() == PerfilUsuario.ADMIN) {
+            auditoria.registrar(ator.id(), RegistroAuditoria.REMOCAO_VINCULO, produtorId);
+        }
     }
 
     private VinculoResponse criar(Usuario agronomo, Usuario produtor) {

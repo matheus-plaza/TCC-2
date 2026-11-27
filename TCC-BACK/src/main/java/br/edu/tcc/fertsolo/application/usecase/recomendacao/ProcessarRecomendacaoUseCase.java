@@ -56,7 +56,7 @@ public class ProcessarRecomendacaoUseCase {
     }
 
     public RecomendacaoResponseDTO simular(UsuarioAutenticado ator, RecomendacaoRequestDTO request) {
-        acesso.exigirPerfil(ator, PerfilUsuario.AGRONOMO, PerfilUsuario.ADMIN);
+        acesso.exigirPerfil(ator, PerfilUsuario.AGRONOMO);
         EntradaRecomendacao entrada = montarEntrada(ator, request);
         return montador.simulacao(entrada, engine.processar(entrada), LocalDateTime.now());
     }

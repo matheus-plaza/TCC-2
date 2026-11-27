@@ -10,8 +10,9 @@ import java.util.Arrays;
 import java.util.Set;
 
 /**
- * Segregação de acesso (RNF05): o administrador vê tudo, o agrônomo vê os produtores
- * vinculados a ele e o produtor vê apenas o que é seu.
+ * Segregação de acesso (RNF05): o agrônomo vê os produtores vinculados a ele e o produtor
+ * vê apenas o que é seu. O administrador gerencia contas e vínculos, sem acesso aos dados
+ * agronômicos (propriedades, talhões, laudos e recomendações).
  */
 @UseCase
 public class ControleAcesso {
@@ -24,7 +25,7 @@ public class ControleAcesso {
 
     public EscopoProdutores escopo(UsuarioAutenticado ator) {
         return switch (ator.perfil()) {
-            case ADMIN -> EscopoProdutores.total();
+            case ADMIN -> EscopoProdutores.de(Set.of());
             case AGRONOMO -> EscopoProdutores.de(usuarios.produtoresDoAgronomo(ator.id()));
             case PRODUTOR -> EscopoProdutores.de(Set.of(ator.id()));
         };

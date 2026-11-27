@@ -267,7 +267,10 @@ export class Usuarios {
   protected excluir(usuario: Usuario): void {
     confirmar(this.dialog, {
       titulo: 'Excluir usuário',
-      mensagem: `Excluir a conta de ${usuario.nome}? Um produtor com propriedades cadastradas não pode ser excluído.`,
+      mensagem:
+        usuario.perfil === 'PRODUTOR'
+          ? `Excluir a conta de ${usuario.nome}? Também serão apagados as propriedades, os talhões, os laudos, as recomendações e os vínculos dele. Esta ação é irreversível.`
+          : `Excluir a conta de ${usuario.nome}? Esta ação é irreversível.`,
       confirmar: 'Excluir',
     }).subscribe((ok) => {
       if (ok) {

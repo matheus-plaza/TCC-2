@@ -84,6 +84,10 @@ export class ApiService {
     return this.http.delete<void>(`${API}/usuarios/${id}`);
   }
 
+  excluirMinhaConta(): Observable<void> {
+    return this.http.delete<void>(`${API}/usuarios/me`);
+  }
+
   vinculos(): Observable<Vinculo[]> {
     return this.http.get<Vinculo[]>(`${API}/vinculos`);
   }

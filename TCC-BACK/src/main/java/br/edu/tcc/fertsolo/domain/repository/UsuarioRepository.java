@@ -26,6 +26,12 @@ public interface UsuarioRepository {
 
     void excluir(Long id);
 
+    /** Exclui o produtor com propriedades, talhões, laudos, recomendações, safras e vínculos. */
+    void excluirProdutorComDados(Long produtorId);
+
+    /** Exclui o agrônomo e seus vínculos; as recomendações dele ficam com os produtores, sem o autor. */
+    void excluirAgronomo(Long agronomoId);
+
     void vincular(Long agronomoId, Long produtorId);
 
     void desvincular(Long agronomoId, Long produtorId);

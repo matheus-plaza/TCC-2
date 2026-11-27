@@ -7,6 +7,8 @@ import br.edu.tcc.fertsolo.infrastructure.persistence.entity.UsuarioJpaEntity;
 import br.edu.tcc.fertsolo.infrastructure.persistence.entity.VinculoJpaEntity;
 import br.edu.tcc.fertsolo.infrastructure.persistence.jpa.UsuarioJpaRepository;
 import br.edu.tcc.fertsolo.infrastructure.persistence.jpa.VinculoJpaRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -20,6 +22,9 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
 
     private final UsuarioJpaRepository usuarios;
     private final VinculoJpaRepository vinculos;
+
+    @PersistenceContext
+    private EntityManager em;
 
     public UsuarioRepositoryImpl(UsuarioJpaRepository usuarios, VinculoJpaRepository vinculos) {
         this.usuarios = usuarios;
@@ -70,6 +75,42 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
     @Override
     public void excluir(Long id) {
         usuarios.deleteById(id);
+    }
+
+    @Override
+    public void excluirProdutorComDados(Long produtorId) {
+        String analises = "SELECT a.id FROM analises_solo a JOIN talhoes t ON t.id = a.talhao_id"
+                + " JOIN propriedades p ON p.id = t.propriedade_id WHERE p.produtor_id = ?1";
+        String recomendacoes = "SELECT r.id FROM recomendacoes r WHERE r.analise_id IN (" + analises + ")";
+        String talhoes = "SELECT t.id FROM talhoes t JOIN propriedades p ON p.id = t.propriedade_id WHERE p.produtor_id = ?1";
+        executarEliminacao(produtorId,
+                "DELETE FROM registros_safra WHERE recomendacao_id IN (" + recomendacoes + ")",
+                "DELETE FROM recomendacoes WHERE id IN (" + recomendacoes + ")",
+                "DELETE FROM analises_solo WHERE id IN (" + analises + ")",
+                "DELETE FROM talhoes WHERE id IN (" + talhoes + ")",
+                "DELETE FROM propriedades WHERE produtor_id = ?1",
+                "DELETE FROM agronomo_produtor WHERE produtor_id = ?1",
+                "DELETE FROM usuarios WHERE id = ?1");
+    }
+
+    @Override
+    public void excluirAgronomo(Long agronomoId) {
+        executarEliminacao(agronomoId,
+                "UPDATE recomendacoes SET gerado_por_id = NULL WHERE gerado_por_id = ?1",
+                "UPDATE recomendacoes SET adotado_por_id = NULL WHERE adotado_por_id = ?1",
+                "DELETE FROM agronomo_produtor WHERE agronomo_id = ?1",
+                "DELETE FROM usuarios WHERE id = ?1");
+    }
+
+    /** O gatilho das recomendações adotadas só aceita estes comandos com a marca desta transação. */
+    private void executarEliminacao(Long id, String... comandos) {
+        em.flush();
+        em.createNativeQuery("SELECT set_config('fertsolo.eliminacao_titular', 'on', true)").getSingleResult();
+        for (String comando : comandos) {
+            em.createNativeQuery(comando).setParameter(1, id).executeUpdate();
+        }
+        em.createNativeQuery("SELECT set_config('fertsolo.eliminacao_titular', 'off', true)").getSingleResult();
+        em.clear();
     }
 
     @Override
